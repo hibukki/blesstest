@@ -15,7 +15,6 @@ pip install git+https://github.com/SonOfLilit/blesstest@main
 ### Define a function to test
 
 ```python
-@blesstest.harness
 def add(a: int, b: int) -> int:
     return a + b
 ```
