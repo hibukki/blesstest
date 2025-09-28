@@ -15,7 +15,7 @@ pip install git+https://github.com/SonOfLilit/blesstest@main
 ### Define a function to test
 
 ```python
-def add(a: int, b: int) -> int:
+def sum(a: int, b: int) -> int:
     return a + b
 ```
 
@@ -27,51 +27,51 @@ In `conftest.py`:
 from blesstest import harness, pytest_collect_file # noqa
 
 import pydantic
-from .functions import add
+from .functions import sum
 
-class AddInput(pydantic.BaseModel):
+class SumInput(pydantic.BaseModel):
     a: int
     b: int
 
-class AddOutput(pydantic.BaseModel):
+class SumOutput(pydantic.BaseModel):
     result: int
 
 @harness
-def addition_harness(test_input: AddInput) -> AddOutput:
-    result = add(test_input.a, test_input.b)
-    return AddOutput(result=result)
+def sum_harness(test_input: SumInput) -> SumOutput:
+    result = sum(test_input.a, test_input.b)
+    return SumOutput(result=result)
 ```
 
 ### Create a test definition file
 
-e.g., `tests/test_addition.blesstest.jsonc`:
+e.g., `tests/test_sumition.blesstest.jsonc`:
 
 ```jsonc
 {
-  "add_simple": {
+  "sum_simple": {
     // This will test the case `sum(a=1, b=2)`
-    "harness": "addition_harness",
+    "harness": "sum_harness",
     "params": {
       "a": 1,
       "b": 2
     }
   },
-  "add_large_numbers": {
-    "harness": "addition_harness",
+  "sum_large_numbers": {
+    "harness": "sum_harness",
     "params": {
       "a": 1000000,
       "b": 2000000
     }
   },
   "with_inheritance": {
-    "base": "add_simple",
+    "base": "sum_simple",
     "params": {
       "b": 5
     }
   },
   "with_variations": {
     // This will run 2 tests: `sum(a=10, b=1)` and `sum(a=10, b=2)`
-    "harness": "addition_harness",
+    "harness": "sum_harness",
     "params": {
       "a": 10
     },
@@ -106,8 +106,8 @@ $ git status blessed/
 [..]
 Untracked files:
 (use "git add <file>..." to include in what will be committed)
-        blessed/add_simple.json
-        blessed/add_large_numbers.json
+        blessed/sum_simple.json
+        blessed/sum_large_numbers.json
         blessed/with_inheritance.json
         blessed/with_variations__b_1.json
         blessed/with_variations__b_2.json
@@ -116,7 +116,7 @@ Untracked files:
 #### Do the changes look good?
 
 ```bash
-$ cat blessed/add_simple.json
+$ cat blessed/sum_simple.json
 ```
 
 ```
@@ -135,7 +135,7 @@ $ cat blessed/add_simple.json
 #### Add the golden (snapshot) files to git
 
 ```bash
-$ git add blessed/add_simple.json
+$ git add blessed/sum_simple.json
 ```
 
 Congrats, you've blessed your first test!
