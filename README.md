@@ -29,11 +29,11 @@ from blesstest import harness, pytest_collect_file # noqa
 import pydantic
 from .functions import add
 
-class AddInput(pydantic.BaseModel): # The input to the function being tested
+class AddInput(pydantic.BaseModel):
     a: int
     b: int
 
-class AddOutput(pydantic.BaseModel): # The output of the function being tested
+class AddOutput(pydantic.BaseModel):
     result: int
 
 @harness
